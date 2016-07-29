@@ -14,6 +14,7 @@
   },
   "homepage": "https://github.com/ceros/ceros-plugins",
   "devDependencies": {
+    "countdown": "^2.6.0",
     "grunt": "~0.4.1",
     "grunt-aws": "^0.3.0",
     "grunt-continue": "^0.1.0",
@@ -23,6 +24,7 @@
     "grunt-fastly": "~0.1.4",
     "grunt-git": "^0.2.14",
     "grunt-version": "~0.2.1",
-    "lodash": "^4.6.1"
+    "lodash": "^4.6.1",
+    "moment": "^2.14.1"
   }
 }
