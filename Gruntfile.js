@@ -10,6 +10,7 @@ module.exports = function(grunt) {
         s3Bucket: false
     };
 
+
     // Breaks out the keys and also gives us a nice reference of what
     // needs to be in here without being able to be changed.
     var awsConfigKeys = _.keys(awsConfig);
@@ -91,34 +92,68 @@ module.exports = function(grunt) {
                     include: ['eloqua'],
                     optimize: 'none',
                     out: './dist/plugins/eloqua/main.js',
-                    skipSemiColonInsertion: true
+                    skipSemiColonInsertion: true,
+
+                    paths: {
+                        elq: "//img.en25.com/i/elqCfg.min",
+                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                    }
                 }
             },
+
             compile_marketo_munchkin_plugin: {
                 options: {
                     baseUrl: './src/marketo-munchkin',
                     include: ['marketo-munchkin'],
                     optimize: 'none',
                     out: './dist/plugins/marketo-munchkin/main.js',
-                    skipSemiColonInsertion: true
+                    skipSemiColonInsertion: true,
+
+                    shim: {
+                        Munchkin: {
+                            exports: 'Munchkin'
+                        }
+                    },
+
+                    paths: {
+                        Munchkin: "//munchkin.marketo.net/munchkin",
+                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                    }
                 }
             },
+
             compile_soundjs_plugin: {
                 options: {
                     baseUrl: './src/soundjs',
                     include: ['soundjs'],
                     optimize: 'none',
                     out: './dist/plugins/soundjs/main.js',
-                    skipSemiColonInsertion: true
+                    skipSemiColonInsertion: true,
+
+                    shim: {
+                        CreateJS: {
+                            exports: 'createjs'
+                        }
+                    },
+
+                    paths: {
+                        CreateJS: "https://code.createjs.com/soundjs-0.6.2.min",
+                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                    }
                 }
             },
+
             compile_highlander_plugin: {
                 options: {
                     baseUrl: './src/highlander',
                     include: ['highlander'],
                     optimize: 'none',
                     out: './dist/plugins/highlander/main.js',
-                    skipSemiColonInsertion: true
+                    skipSemiColonInsertion: true,
+
+                    paths: { 
+                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                    }
                 }
             }
         },
