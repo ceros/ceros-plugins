@@ -16,11 +16,12 @@ var _elqQ = _elqQ || [];
     require.config({
         paths: { 
             elq: "//img.en25.com/i/elqCfg.min",
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3",
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
         }
     });
 
-    require([ 'elq', 'CerosSDK'], function (elq, CerosSDK) { 
+    require(['elq', 'CerosSDK'], function (elq, CerosSDK) { 
+
         var pluginScriptTag = document.getElementById("ceros-eloqua-plugin");
         var siteId = pluginScriptTag.getAttribute("siteId");
         var cookieDomain = pluginScriptTag.getAttribute("cookieDomain") || "";

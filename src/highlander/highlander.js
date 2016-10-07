@@ -17,7 +17,7 @@
 
     require.config({
         paths: { 
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3",
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
         }
     });
 
