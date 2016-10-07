@@ -20,28 +20,29 @@
 (function() {
 
     require.config({
-
         shim: {
-            SoundJS: {
+            CreateJS: {
                 exports: 'createjs'
             }
         },
 
         paths: { 
             CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3",        
-            SoundJS: "https://code.createjs.com/soundjs-0.6.2.min",
+            CreateJS: "https://code.createjs.com/soundjs-0.6.2.min"
         }
-        
     });
 
-    require(['CerosSDK', 'SoundJS'], function (CerosSDK, createjs) {
+    require(['CerosSDK', 'CreateJS'], function (CerosSDK, createjs) {
         CerosSDK.findExperience().done(function(cerosExperience) {
+
             var pluginScriptTag = document.getElementById("ceros-soundjs-plugin");
             var soundTag = pluginScriptTag.getAttribute("soundTag");
             var componentsWithSound = cerosExperience.findComponentsByTag(soundTag);
+
             jQuery.each(componentsWithSound.components, function (soundComponentIndex, soundComponent) {
                 createjs.Sound.registerSound(soundComponent.getPayload(), soundComponent.id);
             });
+
             componentsWithSound.subscribe(CerosSDK.EVENTS.CLICKED, function (clickedComponent) {
                 createjs.Sound.play(clickedComponent.id);
             });
