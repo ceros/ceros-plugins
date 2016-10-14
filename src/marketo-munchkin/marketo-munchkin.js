@@ -9,19 +9,13 @@
 (function() {
 
     require.config({
-        shim: {
-            Munchkin: {
-                exports: 'Munchkin'
-            }
-        },
-        
-        paths: { 
-            Munchkin: "//munchkin.marketo.net/munchkin",
+        paths: {
             CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"   
         }
     });
 
-    require(['Munchkin', 'CerosSDK'], function (Munchkin, CerosSDK) {
+    require(['CerosSDK'], function(CerosSDK) {
+
         var pluginScriptTag = document.getElementById("ceros-marketo-munchkin-plugin");
         var accountId = pluginScriptTag.getAttribute("accountId");
 
@@ -29,7 +23,19 @@
             console.error("Account ID is required for the Ceros Munchkin plugin.");
         }
 
-        Munchkin.init(accountId);
+        var initMunchkin = function() {
+            Munchkin.init(accountId);
+        };
+
+        // load the Marketo script then initialize
+        var munchkinScript = document.createElement('script');
+        munchkinScript.type = "text/javascript";
+        munchkinScript.async = true;
+        munchkinScript.onload = initMunchkin;
+        munchkinScript.src = '//munchkin.marketo.net/munchkin.js';
+
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(munchkinScript, firstScriptTag);
 
         // Register a page change event handler
         CerosSDK.findExperience().fail(function(err){
