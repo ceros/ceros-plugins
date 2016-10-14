@@ -109,14 +109,7 @@ module.exports = function(grunt) {
                     out: './dist/plugins/marketo-munchkin/main.js',
                     skipSemiColonInsertion: true,
 
-                    shim: {
-                        Munchkin: {
-                            exports: 'Munchkin'
-                        }
-                    },
-
                     paths: {
-                        Munchkin: "//munchkin.marketo.net/munchkin",
                         CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
                     }
                 }
