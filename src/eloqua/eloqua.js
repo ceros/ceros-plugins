@@ -1,6 +1,6 @@
 /**
  * Ceros Eloqua Plugin
- * @version 0.2.0
+ * @version 0.3.0
  * @support support@ceros.com
  *
  * This plugin is licensed under the MIT license. A copy of this license and
@@ -11,23 +11,17 @@
 // so that it's in the scope of our Ceros Event callback.
 var _elqQ = _elqQ || [];
 
-
 (function() {
-    if (typeof(CerosSDK) === "undefined") {
-        var sdkScript = document.createElement('script');
-        sdkScript.type = "text/javascript";
-        sdkScript.async = true;
-        sdkScript.onload = activateEloquaTracking;
-        sdkScript.src = "//sdk.ceros.com/standalone-player-sdk-v3.js";
 
-        document.getElementsByTagName('head')[0].appendChild(sdkScript);
-    }
-    else {
-        activateEloquaTracking();
-    }
+    require.config({
+        paths: { 
+            elq: "//img.en25.com/i/elqCfg.min",
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+        }
+    });
 
+    require(['elq', 'CerosSDK'], function (elq, CerosSDK) { 
 
-    function activateEloquaTracking() {
         var pluginScriptTag = document.getElementById("ceros-eloqua-plugin");
         var siteId = pluginScriptTag.getAttribute("siteId");
         var cookieDomain = pluginScriptTag.getAttribute("cookieDomain") || "";
@@ -42,12 +36,6 @@ var _elqQ = _elqQ || [];
             _elqQ.push(['elqUseFirstPartyCookie', cookieDomain]);
         }
 
-        var eloquaScript = document.createElement('script');
-        eloquaScript.type = "text/javascript";
-        eloquaScript.async = true;
-        eloquaScript.src = "//img.en25.com/i/elqCfg.min.js";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(eloquaScript, firstScriptTag);
 
         // Register a page change event handler
         CerosSDK.findExperience().fail(function(err){
@@ -62,6 +50,7 @@ var _elqQ = _elqQ || [];
                 _elqQ.push(['elqTrackPageView', pageUrl]);
             });
         });
-    }
+    });
+
 })();
 
