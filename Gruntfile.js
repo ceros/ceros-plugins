@@ -72,6 +72,13 @@ module.exports = function(grunt) {
                     pkg: grunt.file.readJSON('src/marketo-munchkin/version.json')
                 },
                 src: ['dist/plugins/marketo-munchkin/*.js']
+            },
+            "the-final-count-down": {
+                options: {
+                    prefix: '@version *',
+                    pkg: grunt.file.readJSON('src/the-final-count-down/version.json')
+                },
+                src: ['dist/plugins/the-final-count-down/*.js']
             }
         },
         watch: {
@@ -148,6 +155,29 @@ module.exports = function(grunt) {
                         CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
                     }
                 }
+            },
+            compile_the_final_count_down_plugin: {
+                options: {
+                    baseUrl: '.',
+                    include: ['src/the-final-count-down/the-final-count-down'],
+                    optimize: 'uglify2',
+                    out: './dist/plugins/the-final-count-down/main.js',
+                    skipSemiColonInsertion: true,
+                    paths: {
+                        "CerosSDK":   "//sdk.ceros.com/standalone-player-sdk-v3.min",
+                        "loDash":     "//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min",
+
+                        "modules":    "./src/the-final-count-down/modules",
+                        "countdown": "./node_modules/countdown/countdown",
+                        "moment":    "./node_modules/moment/moment"
+                    },
+
+                    shim: {
+                        countdown : {
+                            exports: "countdown"
+                        }
+                    }
+                }
             }
         },
         md5: {
@@ -202,6 +232,13 @@ module.exports = function(grunt) {
                     cwd: './',
                     verbose: true,
                     tag: 'marketo-munchkin-' + String(grunt.file.readJSON('src/marketo-munchkin/version.json').version)
+                }
+            },
+            tagFinalCountDown: {
+                options: {
+                    cwd: './',
+                    verbose: true,
+                    tag: 'the-final-count-down-' + String(grunt.file.readJSON('src/the-final-count-down/version.json').version)
                 }
             }
         },
@@ -265,7 +302,7 @@ module.exports = function(grunt) {
             branchFileModifier = '-' + grunt.option('branch').replace('/', '-');
         }
 
-        var plugins = ['eloqua', 'marketo-munchkin', 'soundjs', 'highlander'];
+        var plugins = ['eloqua', 'marketo-munchkin', 'soundjs', 'highlander', 'the-final-count-down'];
         _.each(plugins, function(type){
 
             var version = String(grunt.file.readJSON('src/' + type +'/version.json').version);

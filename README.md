@@ -70,3 +70,35 @@ All lead associations will be based on the domain of the experience being viewed
 <script id="ceros-marketo-munchkin-plugin" src="//sdk.ceros.com/marketo-munchkin/main-v0.js" accountId="AAA-111-BBB"></script>
 ```
 2. Replace the value of the accountId attribute with your marketo munchkin Id
+
+## The Final Count Down Plugin
+
+Allows users to display a count down (or up) clock in their Ceros Experiences.
+
+### How to use this plugin:
+
+1. Configure Custom HTML
+
+    1. Paste the following code into the "Custom HTML" field of the Ceros experience inside Ceros Studio.
+ 
+    ```
+    <script id="ceros-countdown-clock" data-countdown-datetime="2017-01-23 00:00:01 UTC" src="//sdk.ceros.com/the-final-count-down/main-v0.js"></script>
+    ```
+
+    2. Update the `data-countdown-datetime` attribute with the date and time you wish to count to, or from. Take care when specifying the timezone - they can be tricky.
+ 
+    3. If you would like to count up to a date and time, add the following attribute: `data-countdown-mode="COUNT-UP"`.
+
+2. Displaying content in Ceros. 
+ 
+    1. Create a Text Box for each unit of the counter you wish to display. Typically this will involve creating 4 text boxes - one each for days, hours, minutes and seconds.
+     
+    2. Tag each of the Text Boxes created in the above step with `count-down`
+      
+    3. Set the payload of each box to a value from the list below (including capitalisation), based on the units it will display.
+        * `DAYS`
+        * `HOURS`
+        * `MINUTES`
+        * `SECONDS`
+    
+    4. Refresh the preview link for your experiences to see your changes.  
