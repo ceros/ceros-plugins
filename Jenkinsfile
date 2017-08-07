@@ -27,7 +27,7 @@ pipeline {
                   }        
                   slackSend (color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
 	              dir('branch') {
-	                   git([url: env.GITURL, branch: params.BRANCH, credentialsId: env.CREDENTIALS])
+	                   git([url: 'https://github.com/ceros/ceros-plugins', branch: params.BRANCH, credentialsId: env.CREDENTIALS])
 	              }
               }
            }      
