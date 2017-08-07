@@ -47,7 +47,7 @@ pipeline {
                         dir('ceros-plugin') {
                            sh 'npm install'
                            sh 'grunt'
-                           sh 'grunt dev-release --aws.accessKey=$DEV_AWS_ACCESS_KEY --aws.secretKey=$DEV_AWS_SECRET_KEY --aws.region=$AWS_REGION --fastly.key=$FASTLY_KEY --fastly.host=$DEV_FASTLY_HOST --aws.s3Bucket=$DEV_AWS_S3_BUCKET --branch=$CI_BRANCH'branch
+                           sh 'grunt dev-release --aws.accessKey=$DEV_AWS_ACCESS_KEY --aws.secretKey=$DEV_AWS_SECRET_KEY --aws.region=$AWS_REGION --fastly.key=$FASTLY_KEY --fastly.host=$DEV_FASTLY_HOST --aws.s3Bucket=$DEV_AWS_S3_BUCKET --branch=$BRANCH'
                      }
                  }
               }
