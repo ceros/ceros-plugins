@@ -42,7 +42,7 @@ pipeline {
        stage('Build and Deploy plugins'){
           steps {
                  script {
-                     docker.image('ceros-plugins').inside {
+                     docker.image('ceros-plugins').inside("-u root") {
                         sh 'npm install -g grunt-cli'
                         dir('ceros-plugin') {
                            sh 'npm install'
