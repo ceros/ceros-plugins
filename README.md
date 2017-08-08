@@ -98,7 +98,3 @@ for each desired carousel (where X is a number) do the following:
      - Create as many button components as there are slides
      - DO NOT put them on the same layer as any of the slides
      - Put the corresponding slide number in the button's payload. (1, 2, 3, etc.)
-
-  This plugin is licensed under the MIT license. A copy of this license and
-  the accompanying source code is available at https://github.com/ceros/ceros-plugins
- /
