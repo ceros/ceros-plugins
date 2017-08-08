@@ -70,3 +70,35 @@ All lead associations will be based on the domain of the experience being viewed
 <script id="ceros-marketo-munchkin-plugin" src="//sdk.ceros.com/marketo-munchkin/main-v0.js" accountId="AAA-111-BBB"></script>
 ```
 2. Replace the value of the accountId attribute with your marketo munchkin Id
+
+
+## Carousels Plugin
+
+This plugin allows you to create image carousels in the Ceros Studio by
+simply tagging the components that make up each carousel. To use this plugin,
+for each desired carousel (where X is a number) do the following:
+
+### How to use this plugin:
+
+   1. Paste the following code into the "Custom HTML" field of the Ceros experience inside Ceros Studio.
+   ```
+   <script src="placeholder"></script>
+   ```
+  2. (Required) Create forward and back arrow components
+     - For the forward arrow, give it the tags "carouselX" and "forward-arrow"
+     - For the back arrow, give it the tags "carouselX" and "back-arrow"
+     - (Optional) If you would like the carousel not to loop, add 'noLoop'
+       to the payloads of both arrows
+  3. (Required) Create a separate layer for each slide to be shown
+     - Give each layer the tags "carouselX" and "carousellayer"
+     - This layer will contain the image to be shown, as well as the button highlight (if there is one)
+     - The layers need to be ordered in the layers panel in the same order that you want them displayed
+       (Example: slide 1 will be above slide 2 in the layers panel)
+  4. (Optional) Create buttons to navigate the slides
+     - Create as many button components as there are slides
+     - DO NOT put them on the same layer as any of the slides
+     - Put the corresponding slide number in the button's payload. (1, 2, 3, etc.)
+
+  This plugin is licensed under the MIT license. A copy of this license and
+  the accompanying source code is available at https://github.com/ceros/ceros-plugins
+ /
