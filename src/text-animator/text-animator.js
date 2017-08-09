@@ -111,13 +111,15 @@
                 self.now = Date.now();
                 self.delta = self.now - self.then;
 
-                if (firstTimeThrough) {
-                    firstTimeThrough = false;
-                    console.log(self.delta > self.mixedCharacterUpdateInterval);
-                }
+
 
                 if (self.delta > self.mixedCharacterUpdateInterval) {
                     self.elapsedNumberOfUpdatesForCurrentCharacter++;
+                    if (firstTimeThrough) {
+                        firstTimeThrough = false;
+                    } else {
+                        return;
+                    }
 
                     if(self.elapsedNumberOfUpdatesForCurrentCharacter === self.numberOfUpdatesForBeforeCharacterSwitch && self.currentCharacter !== self.characterSpans.length){
                         self.currentCharacter++;
