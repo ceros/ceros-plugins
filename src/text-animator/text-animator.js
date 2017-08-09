@@ -110,7 +110,6 @@
                 self.delta = self.now - self.then;
 
                 if (self.delta > self.mixedCharacterUpdateInterval) {
-                    self.elapsedNumberOfUpdatesForCurrentCharacter++;
 
                     if(self.elapsedNumberOfUpdatesForCurrentCharacter === self.numberOfUpdatesForBeforeCharacterSwitch && self.currentCharacter !== self.characterSpans.length){
                         self.currentCharacter++;
@@ -136,6 +135,7 @@
                     });
 
                     self.then = self.now - (self.delta % self.mixedCharacterUpdateInterval);
+                    self.elapsedNumberOfUpdatesForCurrentCharacter++;
                 }
             };
 
