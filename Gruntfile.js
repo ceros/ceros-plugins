@@ -66,6 +66,13 @@ module.exports = function(grunt) {
                 },
                 src: ['dist/plugins/highlander/*.js']
             },
+            'text-animator': {
+                options: {
+                    prefix: '@version *',
+                    pkg: grunt.file.readJSON('src/text-animator/version.json')
+                },
+                src: ['dist/plugins/text-animator/*.js']
+            },
             "marketo-munchkin": {
                 options: {
                     prefix: '@version *',
@@ -144,7 +151,20 @@ module.exports = function(grunt) {
                     out: './dist/plugins/highlander/main.js',
                     skipSemiColonInsertion: true,
 
-                    paths: { 
+                    paths: {
+                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                    }
+                }
+            },
+            "compile_text-animator_plugin": {
+                options: {
+                    baseUrl: './src/text-animator',
+                    include: ['text-animator'],
+                    optimize: 'none',
+                    out: './dist/plugins/text-animator/main.js',
+                    skipSemiColonInsertion: true,
+
+                    paths: {
                         CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
                     }
                 }
@@ -188,6 +208,13 @@ module.exports = function(grunt) {
                     cwd: './',
                     verbose: true,
                     tag: 'highlander-' + String(grunt.file.readJSON('src/highlander/version.json').version)
+                }
+            },
+            tagTextAnimator: {
+                options: {
+                    cwd: './',
+                    verbose: true,
+                    tag: 'text-animator-' + String(grunt.file.readJSON('src/text-animator/version.json').version)
                 }
             },
             tagSoundJs: {
@@ -265,7 +292,7 @@ module.exports = function(grunt) {
             branchFileModifier = '-' + grunt.option('branch').replace('/', '-');
         }
 
-        var plugins = ['eloqua', 'marketo-munchkin', 'soundjs', 'highlander'];
+        var plugins = ['eloqua', 'marketo-munchkin', 'soundjs', 'highlander', 'text-animator'];
         _.each(plugins, function(type){
 
             var version = String(grunt.file.readJSON('src/' + type +'/version.json').version);
