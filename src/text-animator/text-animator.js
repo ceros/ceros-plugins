@@ -114,7 +114,6 @@
 
 
                 if (self.delta > self.mixedCharacterUpdateInterval) {
-                    self.elapsedNumberOfUpdatesForCurrentCharacter++;
                     if (firstTimeThrough) {
                         firstTimeThrough = false;
                     } else {
@@ -145,6 +144,7 @@
                     });
 
                     self.then = self.now - (self.delta % self.mixedCharacterUpdateInterval);
+                    self.elapsedNumberOfUpdatesForCurrentCharacter++;
                 }
             };
 
