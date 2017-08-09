@@ -43,12 +43,18 @@
             var allCarousels = [];
             var carouselsLeft = true;
             var numCarousels = 0;
+            var timer = experience.findLayersByTag('timer');
+            timer.subscribe(CerosSDK.EVENTS.SHOWN, function(component){
+                console.log('hfdaglkfsbjadgblkskgjfbf');
+            });
+
 
             while (carouselsLeft) {
                 var carouselTag = 'carousel' + (numCarousels + 1);
                 carouselsLeft = createCarousel(carouselTag);
                 numCarousels++;
             }
+
 
             /**
              * Creates a carousel object based on a carousel tag ('carousel1')
@@ -77,13 +83,49 @@
                 if (showHideLayers.length === 0) {
                     return false;
                 }
+
+                //TIME TO FIND THE TIMER OBJECT
+                var timerHotspot = experience.findComponentsWithAllTags([carouselTag, 'timer-hotspot']);
+                if (timerHotspot.components.length === 0) {
+                    carouselObj.hasTimer = false;
+                }
+                else {
+                    //TODO find a cleaner way to do this - a bit uneccesary for finding one layer, rather than an array
+                    var timerLayer = _.filter(experience.findLayersByTag(carouselTag).layers, function(layer) {
+                        return _.includes(layer.getTags(), 'timer-layer');
+                    });
+                    if (timerLayer.length === 0) {
+                        carouselObj.hasTimer = false;
+                    }
+                    else {
+                        carouselObj.times = [];
+                        for (var i = 0; i < showHideLayers.length; i++) {
+                            //safety check for parseInt
+                            var payload = parseFloat(showHideLayers[i].getPayload());
+                            if (!isNaN(payload)) {
+                                carouselObj.times.push(payload);
+                            }
+                            else {
+                                carouselObj.hasTimer = false; //if not every layer has time, won't use timer
+                            }
+
+                        }
+                        carouselObj.timerHotspot = timerHotspot.components[0];
+                        carouselObj.timerLayer = timerLayer[0];
+                        carouselObj.hasTimer = true;
+                        carouselObj.timerLayer.subscribe(CerosSDK.EVENTS.SHOWN, timerStart);
+                        carouselObj.timerId = 0; //set when settimeout is called, needed for cleartimeout
+
+                    }
+                }
+
                 carouselObj.showHideLayers = showHideLayers;
 
                 carouselObj.currentIndex = 0;
                 carouselObj.buttons = experience.findComponentsWithAllTags([carouselTag, 'button']);
 
-                carouselObj.forwardArrow.subscribe(CerosSDK.EVENTS.CLICKED, forwardArrowClick);
-                carouselObj.backArrow.subscribe(CerosSDK.EVENTS.CLICKED, backArrowClick);
+                carouselObj.forwardArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToNextSlide);
+                carouselObj.backArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToPrevSlide);
                 carouselObj.buttons.subscribe(CerosSDK.EVENTS.CLICKED, buttonClick);
                 allCarousels.push(carouselObj);
 
@@ -95,9 +137,10 @@
              * advances carousel to the next slide, and updates arrows visibility
              * @param component {component} the arrow component that was clicked
              */
-            function forwardArrowClick(component) {
+            function moveToNextSlide(component) {
                 var carouselIndex = getCarouselIndex(component);
                 var currentIndex = allCarousels[carouselIndex].currentIndex;
+
 
                 allCarousels[carouselIndex].showHideLayers[currentIndex].hide();
                 if (carouselIndex === -1) {
@@ -112,8 +155,12 @@
                     }
                     allCarousels[carouselIndex].showHideLayers[currentIndex].show();
                     allCarousels[carouselIndex].currentIndex = currentIndex;
-
                     updateCarouselArrows(currentIndex, carouselIndex);
+
+                    if (allCarousels[carouselIndex].hasTimer){
+                        clearTimeout(allCarousels[carouselIndex].timerId);
+                        timerStart(component);
+                    }
                 }
             };
 
@@ -122,7 +169,7 @@
              * advances carousel to the previous slide, and updates arrows visibility
              * @param component {component} the arrow component that was clicked
              */
-            function backArrowClick(component) {
+            function moveToPrevSlide(component) {
                 var carouselIndex = getCarouselIndex(component);
                 var currentIndex = allCarousels[carouselIndex].currentIndex;
 
@@ -141,6 +188,11 @@
                     allCarousels[carouselIndex].currentIndex = currentIndex;
 
                     updateCarouselArrows(currentIndex, carouselIndex);
+
+                    if (allCarousels[carouselIndex].hasTimer){
+                        clearTimeout(allCarousels[carouselIndex].timerId);
+                        timerStart(component);
+                    }
                 }
             };
 
@@ -162,7 +214,28 @@
                 }
                 allCarousels[carouselIndex].currentIndex = layerIndex;
                 updateCarouselArrows(layerIndex, carouselIndex);
+
+                if (allCarousels[carouselIndex].hasTimer){
+                    clearTimeout(allCarousels[carouselIndex].timerId);
+                    timerStart(component);
+                }
             };
+
+            function timerStart(component) {
+                var carouselIndex = getCarouselIndex(component);
+                var timeoutTime = allCarousels[carouselIndex].times[allCarousels[carouselIndex].currentIndex];
+                allCarousels[carouselIndex].timerId = setTimeout(function() {
+                    if (allCarousels[carouselIndex].forwardArrow.payload === "noLoop") {
+                        if (allCarousels[carouselIndex].currentIndex !== allCarousels[carouselIndex].showHideLayers.length - 1) {
+                            moveToNextSlide(allCarousels[carouselIndex].forwardArrow);
+                        }
+                    }
+                    else {
+                        moveToNextSlide(allCarousels[carouselIndex].forwardArrow);
+                    }
+                }, timeoutTime * 1000);
+            };
+
 
             /**
              * Updates the visibility of the forwardArrow and backArrow if looping is disabled
