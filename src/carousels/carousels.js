@@ -12,7 +12,7 @@
  *    - (Optional) If you would like the carousel not to loop, add 'noLoop'
  *      to the payloads of both arrows
  * 2. (Required) Create a separate layer for each slide to be shown
- *    - Give each layer the tags "carouselX" and "carousellayer"
+ *    - Give each layer the tags "carouselX" and "carousel-layer"
  *    - This layer will contain the image to be shown, as well as the button highlight (if there is one)
  *    - The layers need to be ordered in the layers panel in the same order that you want them displayed
  *      (Example: slide 1 will be above slide 2 in the layers panel)
@@ -20,6 +20,12 @@
  *    - Create as many button components as there are slides
  *    - DO NOT put them on the same layer as any of the slides
  *    - Put the corresponding slide number in the button's payload. (1, 2, 3, etc.)
+ * 4. (Optional) Create timed auto-advancing slides
+ *    - Create an invisible layer (can be empty), with the tags: 'carouselX' and 'timer-layer'
+ *    - Create any interaction that will show the hidden layer (i.e. a hotspot that shows the layer on view)
+ *    - As soon as the timer layer is shown, the slides will automatically start auto-advancing
+ *    - Add the duration of each slides appearance to their respective layer's payload (in seconds)
+ *    - The durations can be different for each slide, and can be decimal values
  *
  * This plugin is licensed under the MIT license. A copy of this license and
  * the accompanying source code is available at https://github.com/ceros/ceros-plugins
@@ -43,11 +49,6 @@
             var allCarousels = [];
             var carouselsLeft = true;
             var numCarousels = 0;
-            var timer = experience.findLayersByTag('timer');
-            timer.subscribe(CerosSDK.EVENTS.SHOWN, function(component){
-                console.log('hfdaglkfsbjadgblkskgjfbf');
-            });
-
 
             while (carouselsLeft) {
                 var carouselTag = 'carousel' + (numCarousels + 1);
@@ -64,31 +65,31 @@
             function createCarousel(carouselTag) {
                 var carouselObj = {};
 
+                carouselObj.loops = true;
+
                 var forwardArrow = experience.findComponentsWithAllTags([carouselTag, 'forward-arrow']);
-                if (forwardArrow.components.length === 0){
-                    return false;
+                if (forwardArrow.components.length !== 0){
+                    carouselObj.forwardArrow = forwardArrow.components[0];
+                    carouselObj.forwardArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToNextSlide);
+                    if (forwardArrow.getPayload() === "noLoop"){
+                        carouselObj.loops = false;
+                    }
                 }
-                carouselObj.forwardArrow = forwardArrow.components[0];
 
                 var backArrow = experience.findComponentsWithAllTags([carouselTag, 'back-arrow']);
-                if (backArrow.components.length === 0){
-                    return false;
+                if (backArrow.components.length !== 0){
+                    carouselObj.backArrow = backArrow.components[0];
+                    carouselObj.backArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToPrevSlide);
                 }
-                carouselObj.backArrow = backArrow.components[0];
 
                 var showHideLayers = _.filter(experience.findLayersByTag(carouselTag).layers, function(layer) {
-                    return _.includes(layer.getTags(), 'carousellayer');
+                    return _.includes(layer.getTags(), 'carousel-layer');
                 });
 
                 if (showHideLayers.length === 0) {
                     return false;
                 }
 
-                //TIME TO FIND THE TIMER OBJECT
-                var timerHotspot = experience.findComponentsWithAllTags([carouselTag, 'timer-hotspot']);
-                if (timerHotspot.components.length === 0) {
-                    carouselObj.hasTimer = false;
-                }
                 else {
                     //TODO find a cleaner way to do this - a bit uneccesary for finding one layer, rather than an array
                     var timerLayer = _.filter(experience.findLayersByTag(carouselTag).layers, function(layer) {
@@ -110,7 +111,6 @@
                             }
 
                         }
-                        carouselObj.timerHotspot = timerHotspot.components[0];
                         carouselObj.timerLayer = timerLayer[0];
                         carouselObj.hasTimer = true;
                         carouselObj.timerLayer.subscribe(CerosSDK.EVENTS.SHOWN, timerStart);
@@ -120,12 +120,9 @@
                 }
 
                 carouselObj.showHideLayers = showHideLayers;
-
                 carouselObj.currentIndex = 0;
                 carouselObj.buttons = experience.findComponentsWithAllTags([carouselTag, 'button']);
 
-                carouselObj.forwardArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToNextSlide);
-                carouselObj.backArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToPrevSlide);
                 carouselObj.buttons.subscribe(CerosSDK.EVENTS.CLICKED, buttonClick);
                 allCarousels.push(carouselObj);
 
@@ -147,7 +144,7 @@
                     console.log('getCarouselIndex returned -1');
                 }
                 else {
-                    if (component.getPayload() === "noLoop" || currentIndex != allCarousels[carouselIndex].showHideLayers.length -1){
+                    if (allCarousels[carouselIndex].loops === false || currentIndex != allCarousels[carouselIndex].showHideLayers.length -1){
                         currentIndex++;
                     }
                     else {
@@ -178,7 +175,7 @@
                     console.log('getCarouselIndex returned -1');
                 }
                 else {
-                    if (component.getPayload() === "noLoop" || currentIndex !== 0){
+                    if (allCarousels[carouselIndex].loops === false || currentIndex !== 0){
                         currentIndex--;
                     }
                     else { //loop
@@ -221,17 +218,22 @@
                 }
             };
 
+            /**
+             * Starts the timer on the current slide from 0
+             * advances carousel to the appropriate slide based on the buttons payload
+             * @param component {component} compnent that is used to find carouselIndex
+             */
             function timerStart(component) {
                 var carouselIndex = getCarouselIndex(component);
                 var timeoutTime = allCarousels[carouselIndex].times[allCarousels[carouselIndex].currentIndex];
                 allCarousels[carouselIndex].timerId = setTimeout(function() {
-                    if (allCarousels[carouselIndex].forwardArrow.payload === "noLoop") {
+                    if (allCarousels[carouselIndex].loops === false) {
                         if (allCarousels[carouselIndex].currentIndex !== allCarousels[carouselIndex].showHideLayers.length - 1) {
-                            moveToNextSlide(allCarousels[carouselIndex].forwardArrow);
+                            moveToNextSlide(component);
                         }
                     }
                     else {
-                        moveToNextSlide(allCarousels[carouselIndex].forwardArrow);
+                        moveToNextSlide(component);
                     }
                 }, timeoutTime * 1000);
             };
@@ -243,20 +245,24 @@
              * @param carouselIndex {int} the index of the current carousel
              */
             function updateCarouselArrows(currentIndex, carouselIndex) {
-                if (allCarousels[carouselIndex].forwardArrow.payload === "noLoop") {
-                    if (allCarousels[carouselIndex].currentIndex === allCarousels[carouselIndex].showHideLayers.length - 1) {
-                        allCarousels[carouselIndex].forwardArrow.hide();
-                    }
-                    if (allCarousels[carouselIndex].currentIndex > 0) {
-                        allCarousels[carouselIndex].backArrow.show();
+                if (typeof allCarousels[carouselIndex].forwardArrow != "undefined"){
+                    if (allCarousels[carouselIndex].loops === false) {
+                        if (allCarousels[carouselIndex].currentIndex === allCarousels[carouselIndex].showHideLayers.length - 1) {
+                            allCarousels[carouselIndex].forwardArrow.hide();
+                        }
+                        if (allCarousels[carouselIndex].currentIndex > 0) {
+                            allCarousels[carouselIndex].backArrow.show();
+                        }
                     }
                 }
-                if (allCarousels[carouselIndex].backArrow.payload === "noLoop") {
-                    if (allCarousels[carouselIndex].currentIndex === 0){
-                        allCarousels[carouselIndex].backArrow.hide();
-                    }
-                    if (allCarousels[carouselIndex].currentIndex < allCarousels[carouselIndex].showHideLayers.length - 1) {
-                        allCarousels[carouselIndex].forwardArrow.show();
+                if (typeof allCarousels[carouselIndex].forwardArrow != "undefined"){
+                    if (allCarousels[carouselIndex].backArrow.payload === "noLoop") {
+                        if (allCarousels[carouselIndex].currentIndex === 0){
+                            allCarousels[carouselIndex].backArrow.hide();
+                        }
+                        if (allCarousels[carouselIndex].currentIndex < allCarousels[carouselIndex].showHideLayers.length - 1) {
+                            allCarousels[carouselIndex].forwardArrow.show();
+                        }
                     }
                 }
             };

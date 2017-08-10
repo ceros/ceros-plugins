@@ -90,7 +90,7 @@ for each desired carousel (where X is a number) do the following:
      - (Optional) If you would like the carousel not to loop, add 'noLoop'
        to the payloads of both arrows
   3. (Required) Create a separate layer for each slide to be shown
-     - Give each layer the tags "carouselX" and "carousellayer"
+     - Give each layer the tags "carouselX" and "carousel-layer"
      - This layer will contain the image to be shown, as well as the button highlight (if there is one)
      - The layers need to be ordered in the layers panel in the same order that you want them displayed
        (Example: slide 1 will be above slide 2 in the layers panel)
