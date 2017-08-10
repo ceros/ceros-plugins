@@ -108,10 +108,22 @@
 
             self.updateCharacter = function () {
 
+                self.characterSpans.each(function (index) {
+                    var characterSpan = this;
+                    var color;
+                    var character;
+                    if(index > self.currentCharacter){
+                        color = self.getRandomColor();
+                        character = self.getRandCharacter(characterSpan.innerHTML);
+                    } else{
+                        color = self.textColor;
+                        character = self.originalLetters[index];
+                    }
+                    self.updateCharacterSpan(character, color, characterSpan);
+                });
+
                 self.now = Date.now();
                 self.delta = self.now - self.then;
-
-
 
                 if (self.delta > self.mixedCharacterUpdateInterval) {
                     if (firstTimeThrough) {
@@ -129,19 +141,6 @@
                         self.needUpdate = false;
                     }
 
-                    self.characterSpans.each(function (index) {
-                        var characterSpan = this;
-                        var color;
-                        var character;
-                        if(index > self.currentCharacter){
-                            color = self.getRandomColor();
-                            character = self.getRandCharacter(characterSpan.innerHTML);
-                        } else{
-                            color = self.textColor;
-                            character = self.originalLetters[index];
-                        }
-                        self.updateCharacterSpan(character, color, characterSpan);
-                    });
 
                     self.then = self.now - (self.delta % self.mixedCharacterUpdateInterval);
                     self.elapsedNumberOfUpdatesForCurrentCharacter++;
