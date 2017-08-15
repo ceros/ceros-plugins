@@ -6,16 +6,17 @@
  * simply tagging the components that make up each carousel. To use this plugin,
  * for each desired carousel (where X is a number) do the following:
  *
- * 1. (Required) Create forward and back arrow components
- *    - For the forward arrow, give it the tags "carouselX" and "forward-arrow"
- *    - For the back arrow, give it the tags "carouselX" and "back-arrow"
- *    - (Optional) If you would like the carousel not to loop, add 'noLoop'
- *      to the payloads of both arrows
- * 2. (Required) Create a separate layer for each slide to be shown
- *    - Give each layer the tags "carouselX" and "carousel-layer"
+ * 1.  Create a separate layer for each slide to be shown
+ *    - Give each layer the tags "carouselX" (i.e. carousel1) and "carousel-layer"
  *    - This layer will contain the image to be shown, as well as the button highlight (if there is one)
  *    - The layers need to be ordered in the layers panel in the same order that you want them displayed
  *      (Example: slide 1 will be above slide 2 in the layers panel)
+ * .     NOTE: multiple carousels must be labeled in ascending order - 1,2,3,4, etc...
+ * 2.  (Optional) Create forward and back arrow components
+ *    - For the forward arrow, give it the tags "carouselX" and "forward-arrow"
+ *    - For the back arrow, give it the tags "carouselX" and "back-arrow"
+ *    - (Optional) If you would like the carousel not to loop, add 'noLoop'
+ *      to the payload of the forward arrow
  * 3. (Optional) Create buttons to navigate the slides
  *    - Create as many button components as there are slides
  *    - DO NOT put them on the same layer as any of the slides
@@ -71,7 +72,7 @@
                 if (forwardArrow.components.length !== 0){
                     carouselObj.forwardArrow = forwardArrow.components[0];
                     carouselObj.forwardArrow.subscribe(CerosSDK.EVENTS.CLICKED, moveToNextSlide);
-                    if (forwardArrow.getPayload() === "noLoop"){
+                    if (carouselObj.forwardArrow.getPayload() === "noLoop"){
                         carouselObj.loops = false;
                     }
                 }
@@ -159,7 +160,7 @@
                         timerStart(component);
                     }
                 }
-            };
+            }
 
             /**
              * Click handler for back arrow buttonClick
@@ -191,7 +192,7 @@
                         timerStart(component);
                     }
                 }
-            };
+            }
 
             /**
              * Click handler for slide button click
@@ -216,7 +217,7 @@
                     clearTimeout(allCarousels[carouselIndex].timerId);
                     timerStart(component);
                 }
-            };
+            }
 
             /**
              * Starts the timer on the current slide from 0
@@ -236,7 +237,7 @@
                         moveToNextSlide(component);
                     }
                 }, timeoutTime * 1000);
-            };
+            }
 
 
             /**
@@ -256,7 +257,7 @@
                     }
                 }
                 if (typeof allCarousels[carouselIndex].forwardArrow != "undefined"){
-                    if (allCarousels[carouselIndex].backArrow.payload === "noLoop") {
+                    if (allCarousels[carouselIndex].loops === false) {
                         if (allCarousels[carouselIndex].currentIndex === 0){
                             allCarousels[carouselIndex].backArrow.hide();
                         }
@@ -265,7 +266,7 @@
                         }
                     }
                 }
-            };
+            }
 
             /**
              * Gets the index of the carousel, based on the given components tags
@@ -276,14 +277,14 @@
                 var carouselNum = -1;
                 _.each(compTags, function(tag) {
                     if (_.startsWith(tag, 'carousel')) {
-                        var carouselNumArr = tag.match(/(\d+)$/)
+                        var carouselNumArr = tag.match(/(\d+)$/);
                         if (carouselNumArr){
                             carouselNum = parseInt(carouselNumArr[0], 10);
                         }
                     }
                 });
                 return (carouselNum - 1); //NOTE RETURNS INDEX INTO ARRAY, NOT DESIGNER NUM
-            };
+            }
         });
     });
 })();
