@@ -37,7 +37,7 @@
             self.useRandomCharacters = opt['randomize'] || false;
             self.milliSecondsPerLetter = parseInt(opt['milliseconds-per-letter']) || 100;
             self.scramblesPerLetter = parseInt(opt['scrambles-per-letter'], 10) || 1;
-            self.mixedCharacterUpdateInterval = (self.secondsPerLetter / self.scramblesPerLetter).toFixed(2);
+            self.mixedCharacterUpdateInterval = (self.milliSecondsPerLetter / self.scramblesPerLetter).toFixed(2);
 
             self.now;
             self.then = Date.now();
