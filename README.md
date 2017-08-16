@@ -85,13 +85,12 @@ You can define mulitple text components and options for the animation.
 ```
 1. In the Ceros Studio, tag all text components that you would like to animate with `text-animate`.
 1. Add tags for additonal animation options including:
-```
-'text-color' : the color the text will RESOLVE to
+``` 
 'randomize' : before characters resolve, make this true for random characters with random colors, false for blank
              e.g. animating the word "ANIMATE":  ANIM$gR  vs ANIM
-'character-update-interval' : the number of milliseconds before the randomized chunk of a text component updates
-             e.g. if 20, after 20 ms  ANIM$gR might become ANIM^f#
-'updates-per-cycle`: the number of random character updates before resolving the next letter
+'seconds-per-letter' : the number of milliseconds before the next letter resolves
+'scrambles-per-letter`: the number of random character updates before resolving the next letter
              e.g if 2, ANIM$gR might become ANIM^f# before resolving to ANIMA*r and cycling again.
                  NOTE: updates-per-cycle * character-update-interval will give you the number of ms for each character resolution
+mixedCharacterUpdateInterval
 ```

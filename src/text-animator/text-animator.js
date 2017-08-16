@@ -8,12 +8,10 @@
  * You can define mulitple text components and options for the animation.
  *
  * options include:
- * 'text-color' : the color the text will RESOLVE to
  * 'randomize' : before characters resolve, make this true for random characters with random colors, false for blank
  *              e.g. animating the word "ANIMATE":  ANIM$gR  vs ANIM
- * 'character-update-interval' : the number of milliseconds before the randomized chunk of a text component updates
- *              e.g. if 20, after 20 ms  ANIM$gR might become ANIM^f#
- * 'updates-per-cycle`: the number of random character updates before resolving the next letter
+ * 'seconds-per-letter' : the number of milliseconds before the next letter resolves
+ * 'scrambles-per-letter`: the number of random character updates before resolving the next letter
  *              e.g if 2, ANIM$gR might become ANIM^f# before resolving to ANIMA*r and cycling again.
  *                  NOTE: updates-per-cycle * character-update-interval will give you the number of ms for each character resolution
  *
@@ -37,8 +35,9 @@
             //options
             self.textColor = '#000';
             self.useRandomCharacters = opt['randomize'] || false;
-            self.mixedCharacterUpdateInterval = parseInt(opt['character-update-interval']) || 50;
-            self.numberOfUpdatesForBeforeCharacterSwitch = parseInt(opt['updates-per-cycle'], 10) || 1;
+            self.secondsPerLetter = parseInt(opt['character-update-interval']) || 100;
+            self.scramblesPerLetter = parseInt(opt['scrambles-per-letter'], 10) || 1;
+            self.mixedCharacterUpdateInterval = (self.secondsPerLetter / self.scramblesPerLetter).toFixed(2);
 
             self.now;
             self.then = Date.now();
@@ -124,7 +123,7 @@
                         var character;
                         if(index > self.currentCharacter){
                             color = self.getRandomColor();
-                            character = self.getRandCharacter(characterSpan.innerHTML);
+                            character = self.getRandCharacter(self.originalLetters[index]);
                         } else{
                             color = self.textColor;
                             character = self.originalLetters[index];
@@ -133,7 +132,7 @@
                     });
                     self.elapsedNumberOfUpdatesForCurrentCharacter++;
 
-                    if(self.elapsedNumberOfUpdatesForCurrentCharacter === self.numberOfUpdatesForBeforeCharacterSwitch && self.currentCharacter !== self.characterSpans.length){
+                    if(self.elapsedNumberOfUpdatesForCurrentCharacter === self.scramblesPerLetter && self.currentCharacter !== self.characterSpans.length){
                         self.currentCharacter++;
                         self.elapsedNumberOfUpdatesForCurrentCharacter = 0;
                     }
