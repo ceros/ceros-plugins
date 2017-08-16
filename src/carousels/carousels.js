@@ -19,10 +19,11 @@
  *      to the payload of the forward arrow
  * 3. (Optional) Create buttons to navigate the slides
  *    - Create as many button components as there are slides
+ *    - Give each button the tags "carouselX" and "button"
  *    - DO NOT put them on the same layer as any of the slides
  *    - Put the corresponding slide number in the button's payload. (1, 2, 3, etc.)
  * 4. (Optional) Create timed auto-advancing slides
- *    - Create an invisible layer (can be empty), with the tags: 'carouselX' and 'timer-layer'
+ *    - Create an invisible layer (can be empty), with the tags: "carouselX" and "timer-layer"
  *    - Create any interaction that will show the hidden layer (i.e. a hotspot that shows the layer on view)
  *    - As soon as the timer layer is shown, the slides will automatically start auto-advancing
  *    - Add the duration of each slides appearance to their respective layer's payload (in seconds)
