@@ -105,13 +105,26 @@
             };
 
             self.updateCharacter = function () {
-
-
-
+                
                 self.now = Date.now();
                 self.delta = self.now - self.then;
 
                 if (self.delta > self.mixedCharacterUpdateInterval) {
+
+                    self.characterSpans.each(function (index) {
+                        var characterSpan = this;
+                        var color;
+                        var character;
+                        if(index > self.currentCharacter){
+                            color = self.getRandomColor();
+                            character = self.getRandCharacter(characterSpan.innerHTML);
+                        } else{
+                            color = self.textColor;
+                            character = self.originalLetters[index];
+                        }
+                        self.updateCharacterSpan(character, color, characterSpan);
+                    });
+                    self.elapsedNumberOfUpdatesForCurrentCharacter++;
 
                     if(self.elapsedNumberOfUpdatesForCurrentCharacter === self.numberOfUpdatesForBeforeCharacterSwitch && self.currentCharacter !== self.characterSpans.length){
                         self.currentCharacter++;
@@ -122,23 +135,8 @@
                         self.needUpdate = false;
                     }
 
-
-                    self.characterSpans.each(function (index) {
-                        var characterSpan = this;
-                        var color;
-                        var character;
-                        if(index > self.currentCharacter){
-                            color = self.getRandomColor();
-                            character = self.getRandCharacter(characterSpan.innerHTML);
-                        } else{
-                            color = self.textColor;
-                            character = self.originalLetters[index];
-                        }
-                        self.updateCharacterSpan(character, color, characterSpan);
-                    });
-
                     self.then = self.now - (self.delta % self.mixedCharacterUpdateInterval);
-                    self.elapsedNumberOfUpdatesForCurrentCharacter++;
+
                 }
             };
 
@@ -149,19 +147,6 @@
 
             function update() {
                 if(self.needUpdate){
-                    self.characterSpans.each(function (index) {
-                        var characterSpan = this;
-                        var color;
-                        var character;
-                        if(index > self.currentCharacter){
-                            color = self.getRandomColor();
-                            character = self.getRandCharacter(characterSpan.innerHTML);
-                        } else{
-                            color = self.textColor;
-                            character = self.originalLetters[index];
-                        }
-                        self.updateCharacterSpan(character, color, characterSpan);
-                    });
                     self.updateCharacter();
                 }
                 requestAnimationFrame(update);
