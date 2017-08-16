@@ -35,7 +35,7 @@
             var self = this;
 
             //options
-            self.textColor = opt['text-color'] || '#000';
+            self.textColor = '#000';
             self.useRandomCharacters = opt['randomize'] || false;
             self.mixedCharacterUpdateInterval = parseInt(opt['character-update-interval']) || 50;
             self.numberOfUpdatesForBeforeCharacterSwitch = parseInt(opt['updates-per-cycle'], 10) || 1;
@@ -44,10 +44,17 @@
             self.then = Date.now();
 
             self.characterSpans = textComponent.find('span');
+            var firstLetter = characterSpans[0];
+
+            if (firstLetter) {
+                self.textColor = firstLetter.style.color;
+            }
+
             self.originalLetters = [];
             self.characterSpans.each(
                 function(index, item) {
                     self.originalLetters.push(item.innerHTML);
+                    item.innerHTML = " ";
                 });
 
 
@@ -105,7 +112,7 @@
             };
 
             self.updateCharacter = function () {
-                
+
                 self.now = Date.now();
                 self.delta = self.now - self.then;
 
