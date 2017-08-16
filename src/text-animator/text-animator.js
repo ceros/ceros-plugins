@@ -35,6 +35,7 @@
             //options
             self.textColor = '#000';
             self.useRandomCharacters = opt['randomize'] || false;
+            self.useTypewriterEffect = opt['typewriter'] || false;
             self.milliSecondsPerLetter = parseInt(opt['milliseconds-per-letter']) || 100;
             self.scramblesPerLetter = parseInt(opt['scrambles-per-letter'], 10) || 1;
             self.mixedCharacterUpdateInterval = (self.milliSecondsPerLetter / self.scramblesPerLetter).toFixed(2);
@@ -86,6 +87,10 @@
                 '#','-',':',';','~'
             ];
 
+            self.getRandomInterval = function() {
+                return Math.floor(Math.random() * 201)
+            };
+
 
             self.getRandomColor = function () {
                 var randNum = Math.floor( Math.random() * self.colors.length );
@@ -115,7 +120,7 @@
                 self.now = Date.now();
                 self.delta = self.now - self.then;
 
-                if (self.delta > self.mixedCharacterUpdateInterval) {
+                if (self.delta > (self.useTypewriterEffect? self.getRandomInterval() : self.mixedCharacterUpdateInterval)) {
 
                     self.characterSpans.each(function (index) {
                         var characterSpan = this;
