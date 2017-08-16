@@ -10,7 +10,7 @@
  * options include:
  * 'randomize' : before characters resolve, make this true for random characters with random colors, false for blank
  *              e.g. animating the word "ANIMATE":  ANIM$gR  vs ANIM
- * 'seconds-per-letter' : the number of milliseconds before the next letter resolves
+ * 'milliseconds-per-letter' : the number of milliseconds before the next letter resolves
  * 'scrambles-per-letter`: the number of random character updates before resolving the next letter
  *              e.g if 2, ANIM$gR might become ANIM^f# before resolving to ANIMA*r and cycling again.
  *                  NOTE: updates-per-cycle * character-update-interval will give you the number of ms for each character resolution
@@ -35,7 +35,7 @@
             //options
             self.textColor = '#000';
             self.useRandomCharacters = opt['randomize'] || false;
-            self.secondsPerLetter = parseInt(opt['character-update-interval']) || 100;
+            self.milliSecondsPerLetter = parseInt(opt['milliseconds-per-letter']) || 100;
             self.scramblesPerLetter = parseInt(opt['scrambles-per-letter'], 10) || 1;
             self.mixedCharacterUpdateInterval = (self.secondsPerLetter / self.scramblesPerLetter).toFixed(2);
 

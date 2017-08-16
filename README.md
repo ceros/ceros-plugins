@@ -88,7 +88,7 @@ You can define mulitple text components and options for the animation.
 ``` 
 'randomize' : before characters resolve, make this true for random characters with random colors, false for blank
              e.g. animating the word "ANIMATE":  ANIM$gR  vs ANIM
-'seconds-per-letter' : the number of milliseconds before the next letter resolves
+'milliseconds-per-letter' : the number of milliseconds before the next letter resolves
 'scrambles-per-letter`: the number of random character updates before resolving the next letter
              e.g if 2, ANIM$gR might become ANIM^f# before resolving to ANIMA*r and cycling again.
                  NOTE: updates-per-cycle * character-update-interval will give you the number of ms for each character resolution
