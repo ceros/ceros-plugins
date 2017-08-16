@@ -44,7 +44,7 @@
             self.then = Date.now();
 
             self.characterSpans = textComponent.find('span');
-            var firstLetter = characterSpans[0];
+            var firstLetter = self.characterSpans[0];
 
             if (firstLetter) {
                 self.textColor = firstLetter.style.color;
