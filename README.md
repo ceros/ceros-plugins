@@ -87,7 +87,7 @@ You can define mulitple text components and options for the animation.
 1. Add tags for additonal animation options including:
 ```
 'text-color' : the color the text will RESOLVE to
-'use-random-characters' : before characters resolve, make this true for random characters with random colors, false for blank
+'randomize' : before characters resolve, make this true for random characters with random colors, false for blank
              e.g. animating the word "ANIMATE":  ANIM$gR  vs ANIM
 'character-update-interval' : the number of milliseconds before the randomized chunk of a text component updates
              e.g. if 20, after 20 ms  ANIM$gR might become ANIM^f#

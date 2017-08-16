@@ -9,7 +9,7 @@
  *
  * options include:
  * 'text-color' : the color the text will RESOLVE to
- * 'use-random-characters' : before characters resolve, make this true for random characters with random colors, false for blank
+ * 'randomize' : before characters resolve, make this true for random characters with random colors, false for blank
  *              e.g. animating the word "ANIMATE":  ANIM$gR  vs ANIM
  * 'character-update-interval' : the number of milliseconds before the randomized chunk of a text component updates
  *              e.g. if 20, after 20 ms  ANIM$gR might become ANIM^f#
@@ -36,9 +36,9 @@
 
             //options
             self.textColor = opt['text-color'] || '#000';
-            self.useRandomCharacters = opt['use-random-characters'] || false;
+            self.useRandomCharacters = opt['randomize'] || false;
             self.mixedCharacterUpdateInterval = parseInt(opt['character-update-interval']) || 50;
-            self.numberOfUpdatesForBeforeCharacterSwitch = parseInt(opt['updates-per-cycle'], 10) || 5;
+            self.numberOfUpdatesForBeforeCharacterSwitch = parseInt(opt['updates-per-cycle'], 10) || 1;
 
             self.now;
             self.then = Date.now();
@@ -103,22 +103,10 @@
                 span.innerHTML = character;
                 return span;
             };
-            
+
             self.updateCharacter = function () {
 
-                self.characterSpans.each(function (index) {
-                    var characterSpan = this;
-                    var color;
-                    var character;
-                    if(index > self.currentCharacter){
-                        color = self.getRandomColor();
-                        character = self.getRandCharacter(characterSpan.innerHTML);
-                    } else{
-                        color = self.textColor;
-                        character = self.originalLetters[index];
-                    }
-                    self.updateCharacterSpan(character, color, characterSpan);
-                });
+
 
                 self.now = Date.now();
                 self.delta = self.now - self.then;
@@ -135,6 +123,20 @@
                     }
 
 
+                    self.characterSpans.each(function (index) {
+                        var characterSpan = this;
+                        var color;
+                        var character;
+                        if(index > self.currentCharacter){
+                            color = self.getRandomColor();
+                            character = self.getRandCharacter(characterSpan.innerHTML);
+                        } else{
+                            color = self.textColor;
+                            character = self.originalLetters[index];
+                        }
+                        self.updateCharacterSpan(character, color, characterSpan);
+                    });
+
                     self.then = self.now - (self.delta % self.mixedCharacterUpdateInterval);
                     self.elapsedNumberOfUpdatesForCurrentCharacter++;
                 }
@@ -147,6 +149,19 @@
 
             function update() {
                 if(self.needUpdate){
+                    self.characterSpans.each(function (index) {
+                        var characterSpan = this;
+                        var color;
+                        var character;
+                        if(index > self.currentCharacter){
+                            color = self.getRandomColor();
+                            character = self.getRandCharacter(characterSpan.innerHTML);
+                        } else{
+                            color = self.textColor;
+                            character = self.originalLetters[index];
+                        }
+                        self.updateCharacterSpan(character, color, characterSpan);
+                    });
                     self.updateCharacter();
                 }
                 requestAnimationFrame(update);
