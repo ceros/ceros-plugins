@@ -165,32 +165,6 @@
             update();
         }
 
-        function runLayerTextAnimators(layer) {
-            var taggedComponents = layer.findAllComponents().findComponentsByTag('text-animate').components;
-            _.each(taggedComponents, function(component) {
-                var options = {};
-                _.each(component.tags, function(tag) {
-                    if (tag.indexOf("=") > -1) {
-                        var option = tag.split('=');
-                        options[option[0]] =  option[1];
-                    } else {
-                        options[tag] = true;
-                    }
-                });
-
-                var textComponent = $('#' + component.id);
-
-                if (textComponent.css('display') === 'none') {
-                    layer.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
-                        new TextAnimator(textComponent, options);
-                    });
-                } else {
-                    new TextAnimator(textComponent, options);
-                }
-            });
-        }
-
-
         CerosSDK.findExperience().done(function(experience){
             var allLayers = experience.findAllLayers().layers;
 
