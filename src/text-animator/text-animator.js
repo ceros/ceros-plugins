@@ -138,7 +138,9 @@
                     });
                     self.elapsedNumberOfUpdatesForCurrentCharacter++;
 
-                    self.mixedCharacterUpdateInterval = getRandomInterval();
+                    if (self.useTypewriterEffect) {
+                        self.mixedCharacterUpdateInterval = getRandomInterval();
+                    }
 
                     if(self.elapsedNumberOfUpdatesForCurrentCharacter === self.scramblesPerLetter && self.currentCharacter !== self.characterSpans.length){
                         self.currentCharacter++;
