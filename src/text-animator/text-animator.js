@@ -177,7 +177,15 @@
                     }
                 });
 
-                new TextAnimator($('#' + component.id), options);
+                var textComponent = $('#' + component.id);
+
+                if (textComponent.css('display') === 'none') {
+                    layer.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
+                        new TextAnimator(textComponent, options);
+                    });
+                } else {
+                    new TextAnimator(textComponent, options);
+                }
             });
         }
 
@@ -185,17 +193,29 @@
         CerosSDK.findExperience().done(function(experience){
             var allLayers = experience.findAllLayers().layers;
 
-            _.each(allLayers, function(layer) {
-                if ($('#' +layer.id).css('display') === "none") {
-                    layer.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
-                        runLayerTextAnimators(layer);
+            _.each(allLayers, function(layer) {    var taggedComponents = layer.findAllComponents().findComponentsByTag('text-animate').components;
+                _.each(taggedComponents, function(component) {
+                    var options = {};
+                    _.each(component.tags, function(tag) {
+                        if (tag.indexOf("=") > -1) {
+                            var option = tag.split('=');
+                            options[option[0]] =  option[1];
+                        } else {
+                            options[tag] = true;
+                        }
                     });
-                } else {
-                    runLayerTextAnimators(layer);
-                }
+
+                    var textComponent = $('#' + component.id);
+
+                    if (textComponent.css('display') === 'none') {
+                        layer.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
+                            new TextAnimator(textComponent, options);
+                        });
+                    } else {
+                        new TextAnimator(textComponent, options);
+                    }
+                });
             })
-
-
         });
     });
 })();
