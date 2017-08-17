@@ -88,7 +88,7 @@
             ];
 
             function getRandomInterval() {
-                return Math.floor(Math.random() * 201)
+                return Math.floor(Math.random() * 186) + 15
             }
 
 
@@ -153,24 +153,19 @@
                 }
             };
 
-            self.restart = function () {
-                self.currentCharacter = 0;
-                self.needUpdate = true;
-            };
-
             function update() {
                 if(self.needUpdate){
                     self.updateCharacter();
                 }
+
                 requestAnimationFrame(update);
             }
 
             update();
         }
 
-
-        CerosSDK.findExperience().done(function(experience){
-            var taggedComponents = experience.findComponentsByTag("text-animate").components;
+        function runLayerTextAnimators(layer) {
+            var taggedComponents = layer.findAllComponents().findComponentsByTag('text-animate').components;
             _.each(taggedComponents, function(component) {
                 var options = {};
                 _.each(component.tags, function(tag) {
@@ -184,6 +179,23 @@
 
                 new TextAnimator($('#' + component.id), options);
             });
+        }
+
+
+        CerosSDK.findExperience().done(function(experience){
+            var allLayers = experience.findAllLayers().layers;
+
+            _.each(allLayers, function(layer) {
+                if ($('#' +layer.id).css('display') === "none") {
+                    allLayers.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
+                        runLayerTextAnimators(layer);
+                    });
+                } else {
+                    runLayerTextAnimators(layer);
+                }
+            })
+
+
         });
     });
 })();
