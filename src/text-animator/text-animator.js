@@ -187,7 +187,7 @@
 
             _.each(allLayers, function(layer) {
                 if ($('#' +layer.id).css('display') === "none") {
-                    allLayers.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
+                    layer.subscribe(CerosSDK.EVENTS.SHOWN, function(layer) {
                         runLayerTextAnimators(layer);
                     });
                 } else {
