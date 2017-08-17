@@ -13,7 +13,8 @@
  * 'milliseconds-per-letter' : the number of milliseconds before the next letter resolves
  * 'scrambles-per-letter`: the number of random character updates before resolving the next letter
  *              e.g if 2, ANIM$gR might become ANIM^f# before resolving to ANIMA*r and cycling again.
- *                  NOTE: updates-per-cycle * character-update-interval will give you the number of ms for each character resolution
+ * 'typewriter' : will grab a random number of milliseconds from 15-200 between each letter, making the text animation
+ *                  appear more authentic
  *
  * This plugin is licensed under the MIT license. A copy of this license and
  * the accompanying source code is available at https://github.com/ceros/ceros-plugins
