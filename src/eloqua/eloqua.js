@@ -16,7 +16,7 @@ var _elqQ = _elqQ || [];
     require.config({
         paths: { 
             elq: "//img.en25.com/i/elqCfg.min",
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+            CerosSDK: '//sdk.ceros.com/standalone-player-sdk-v5'
         }
     });
 
