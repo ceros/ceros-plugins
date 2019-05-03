@@ -41,7 +41,7 @@ var _elqQ = _elqQ || [];
         CerosSDK.findExperience().fail(function(err){
             console.error(err);
         }).done(function(experience){
-            experience.subscribe(CerosSDK.EVENTS.PAGE_CHANGE, function(page){
+            experience.on(CerosSDK.EVENTS.PAGE_CHANGE, function(page){
                 var pageUrl = window.location.href;
                 // if the URL does not end in /p/N, where N is a number
                 if (!pageUrl.match(/\/p\/\d+$/)){
