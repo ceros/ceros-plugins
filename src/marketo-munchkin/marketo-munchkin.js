@@ -10,11 +10,11 @@
 
     require.config({
         paths: {
-            CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v5"
         }
     });
 
-    require(['CerosStandaloneSDKv5'], function(CerosSDK) {
+    require(['CerosSDK'], function(CerosSDK) {
 
         var pluginScriptTag = document.getElementById("ceros-marketo-munchkin-plugin");
         var accountId = pluginScriptTag.getAttribute("accountId");

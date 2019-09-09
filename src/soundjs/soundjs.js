@@ -27,12 +27,12 @@
         },
 
         paths: { 
-            CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5",
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v5",
             CreateJS: "https://code.createjs.com/soundjs-0.6.2.min"
         }
     });
 
-    require(['CerosStandaloneSDKv5', 'CreateJS'], function (CerosSDK, createjs) {
+    require(['CerosSDK', 'CreateJS'], function (CerosSDK, createjs) {
         CerosSDK.findExperience().done(function(cerosExperience) {
 
             var pluginScriptTag = document.getElementById("ceros-soundjs-plugin");

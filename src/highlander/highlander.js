@@ -17,11 +17,11 @@
 
     require.config({
         paths: { 
-            CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v5"
         }
     });
 
-    require(['CerosStandaloneSDKv5'], function (CerosSDK) { 
+    require(['CerosSDK'], function (CerosSDK) { 
         CerosSDK.findExperience().done(function(cerosExperience) {
             var pluginScriptTag = document.getElementById("ceros-highlander-plugin");
             var highlanderTags = pluginScriptTag.getAttribute("highlanderTags").split(',');
