@@ -41,8 +41,8 @@
         CerosSDK.findExperience().fail(function(err){
             console.error(err);
         }).done(function(experience){
-            var afterFirstChange = false; //Munchkin.init method automatically sends visitPage and PAGE_CHANGE is called on load, so skip the first one
-            experience.subscribe(CerosSDK.EVENTS.PAGE_CHANGE, function(page){
+            var afterFirstChange = false; //Munchkin.init method automatically sends visitPage and PAGE_CHANGED is called on load, so skip the first one
+            experience.on(CerosSDK.EVENTS.PAGE_CHANGED, function(page){
                 if (afterFirstChange) {
                     var pathname = window.location.pathname;
                     // if the URL does not end in /p/N, where N is a number

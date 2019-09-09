@@ -28,7 +28,7 @@
 
             jQuery.each(highlanderTags, function(tagIndex, groupTag) {
             	var layerCollection = cerosExperience.findLayersByTag(groupTag);
-            	layerCollection.subscribe(CerosSDK.EVENTS.SHOWN, function(theVisibleLayer) {
+            	layerCollection.on(CerosSDK.EVENTS.SHOWN, function(theVisibleLayer) {
             		jQuery.each(layerCollection.layers, function(layerIndex, someLayerInTheGroup) {
             			if (someLayerInTheGroup != theVisibleLayer) {
             				someLayerInTheGroup.hide();

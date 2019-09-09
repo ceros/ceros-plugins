@@ -43,7 +43,7 @@
                 createjs.Sound.registerSound(soundComponent.getPayload(), soundComponent.id);
             });
 
-            componentsWithSound.subscribe(CerosSDK.EVENTS.CLICKED, function (clickedComponent) {
+            componentsWithSound.on(CerosSDK.EVENTS.CLICKED, function (clickedComponent) {
                 createjs.Sound.play(clickedComponent.id);
             });
         });
