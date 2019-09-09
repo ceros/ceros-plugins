@@ -1,6 +1,6 @@
 /**
  * Ceros Eloqua Plugin
- * @version 0.3.0
+ * @version 0.4.0
  * @support support@ceros.com
  *
  * This plugin is licensed under the MIT license. A copy of this license and
@@ -16,11 +16,11 @@ var _elqQ = _elqQ || [];
     require.config({
         paths: { 
             elq: "//img.en25.com/i/elqCfg.min",
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+            CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
         }
     });
 
-    require(['elq', 'CerosSDK'], function (elq, CerosSDK) { 
+    require(['elq', 'CerosStandaloneSDKv5'], function (elq, CerosSDK) {
 
         var pluginScriptTag = document.getElementById("ceros-eloqua-plugin");
         var siteId = pluginScriptTag.getAttribute("siteId");

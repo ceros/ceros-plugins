@@ -1,6 +1,6 @@
 /**
  * Ceros Highlander Plugin. There can be only one (layer visible at a time)
- * @version 0.3.0
+ * @version 0.4.0
  * @support support@ceros.com
  *
  * This plugin allows you to define a group of layers, where only 1 layer in the group can be visible at a time
@@ -17,11 +17,11 @@
 
     require.config({
         paths: { 
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+            CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
         }
     });
 
-    require(['CerosSDK'], function (CerosSDK) { 
+    require(['CerosStandaloneSDKv5'], function (CerosSDK) { 
         CerosSDK.findExperience().done(function(cerosExperience) {
             var pluginScriptTag = document.getElementById("ceros-highlander-plugin");
             var highlanderTags = pluginScriptTag.getAttribute("highlanderTags").split(',');

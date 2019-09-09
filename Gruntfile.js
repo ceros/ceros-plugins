@@ -96,7 +96,7 @@ module.exports = function(grunt) {
 
                     paths: {
                         elq: "//img.en25.com/i/elqCfg.min",
-                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                        CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
                     }
                 }
             },
@@ -110,7 +110,7 @@ module.exports = function(grunt) {
                     skipSemiColonInsertion: true,
 
                     paths: {
-                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                        CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
                     }
                 }
             },
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
 
                     paths: {
                         CreateJS: "https://code.createjs.com/soundjs-0.6.2.min",
-                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                        CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
                     }
                 }
             },
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
                     skipSemiColonInsertion: true,
 
                     paths: { 
-                        CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+                        CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5"
                     }
                 }
             }

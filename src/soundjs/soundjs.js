@@ -1,6 +1,6 @@
 /**
  * Ceros Plugin for SoundJS
- * @version 0.3.0
+ * @version 0.4.0
  * @support support@ceros.com
  *
  * This plugin enables people using the Ceros Studio to create an experience
@@ -27,12 +27,12 @@
         },
 
         paths: { 
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3",        
+            CerosStandaloneSDKv5: "//sdk.ceros.com/standalone-player-sdk-v5",
             CreateJS: "https://code.createjs.com/soundjs-0.6.2.min"
         }
     });
 
-    require(['CerosSDK', 'CreateJS'], function (CerosSDK, createjs) {
+    require(['CerosStandaloneSDKv5', 'CreateJS'], function (CerosSDK, createjs) {
         CerosSDK.findExperience().done(function(cerosExperience) {
 
             var pluginScriptTag = document.getElementById("ceros-soundjs-plugin");
