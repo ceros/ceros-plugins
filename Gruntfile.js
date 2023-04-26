@@ -40,6 +40,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-version');
     grunt.loadNpmTasks('grunt-aws');
     grunt.loadNpmTasks('grunt-fastly');
+    grunt.loadNpmTasks('grunt-cloudflare-purge');
     grunt.loadNpmTasks('grunt-git');
 
     grunt.initConfig({
@@ -224,8 +225,14 @@ module.exports = function(grunt) {
                     host: grunt.option('fastly.host')
                 }
             }
+        },
+        cloudflare_purge: {
+            options: {
+                email: grunt.option('cloudflare.email'),
+                apiKey: grunt.option('cloudflare.apiKey'),
+                zone: grunt.option('cloudflare.zone')
+            }
         }
-
     });
 
     /**
@@ -378,7 +385,8 @@ module.exports = function(grunt) {
         's3:releaseNonGzip',
         // Invalidate the Files on Fastly
         'updateFastlyOptions',
-        'fastly'
+        'fastly',
+        'cloudflare_purge'
     ]);
 
     // Should only be run via CodeShip.
@@ -406,6 +414,7 @@ module.exports = function(grunt) {
         's3:releaseNonGzip',
         // Invalidate the Files on Fastly
         'updateFastlyOptions',
-        'fastly'
+        'fastly',
+        'cloudflare_purge'
     ]);
 };
