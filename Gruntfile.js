@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     var awsConfig = {
         accessKey: false,
         secretKey: false,
+        sessionToken: '',
         region: false,
         s3Bucket: false
     };
@@ -40,6 +41,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-version');
     grunt.loadNpmTasks('grunt-aws');
     grunt.loadNpmTasks('grunt-fastly');
+    grunt.loadNpmTasks('grunt-cloudflare-purge');
     grunt.loadNpmTasks('grunt-git');
 
     grunt.initConfig({
@@ -160,6 +162,8 @@ module.exports = function(grunt) {
                 options: {
                     accessKeyId: "<%= aws.accessKey %>",
                     secretAccessKey: "<%= aws.secretKey %>",
+                    sessionToken: "<%= aws.sessionToken %>",
+                    assumeRole: true,
                     region: "<%= aws.region %>",
                     bucket: "<%= aws.s3Bucket %>",
                     access: 'public-read',
@@ -224,8 +228,18 @@ module.exports = function(grunt) {
                     host: grunt.option('fastly.host')
                 }
             }
+        },
+        cloudflare_purge: {
+            options: {
+                email: grunt.option('cloudflare.email'),
+                apiKey: grunt.option('cloudflare.apiKey')
+            },
+            playersdk: {
+                options: {
+                    zone: grunt.option('cloudflare.zone')
+                }
+            }
         }
-
     });
 
     /**
@@ -332,6 +346,11 @@ module.exports = function(grunt) {
         // Loop through the array of values here and make sure they are all set.
         _.each(awsConfigKeys, function(key) {
 
+            // Optional key
+            if (key === 'sessionToken') {
+                return;
+            }
+
             if (!awsConfig[key]) {
                 grunt.log.error('Missing input [' + key + '] Please use --aws.' + key + '=<value>');
                 hasAllKeys = false;
@@ -378,7 +397,8 @@ module.exports = function(grunt) {
         's3:releaseNonGzip',
         // Invalidate the Files on Fastly
         'updateFastlyOptions',
-        'fastly'
+        'fastly',
+        'cloudflare_purge'
     ]);
 
     // Should only be run via CodeShip.
@@ -406,6 +426,7 @@ module.exports = function(grunt) {
         's3:releaseNonGzip',
         // Invalidate the Files on Fastly
         'updateFastlyOptions',
-        'fastly'
+        'fastly',
+        'cloudflare_purge'
     ]);
 };
