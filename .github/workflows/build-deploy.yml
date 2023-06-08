@@ -1,0 +1,67 @@
+name: Build and Deploy
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-test-js:
+    name: Build, Test, and Deploy Js
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: |
+          npm i -g grunt-cli
+          npm install
+          wget -q https://github.com/Droplr/aws-env/raw/master/bin/aws-env-linux-amd64 -O ./aws-env
+          chmod +x ./aws-env
+
+      # - name: Test
+      #   run: grunt
+
+      - name: Configure AWS Credentials Development
+        uses: aws-actions/configure-aws-credentials@v2
+        if: ${{ github.ref_name == 'develop' || startsWith(github.ref_name, 'release/') || startsWith(github.ref_name, 'feature/') }}
+        with:
+          role-to-assume: arn:aws:iam::363177493653:role/github-oidc-studio-dev
+          aws-region: us-east-1
+
+      - name: Configure AWS Credentials Production
+        uses: aws-actions/configure-aws-credentials@v2
+        if: ${{ github.ref_name == 'master' }}
+        with:
+          role-to-assume: arn:aws:iam::363177493653:role/github-oidc-studio-prod
+          aws-region: us-east-1
+
+      - name: Deploy Production
+        if: ${{ github.ref_name == 'master' }}
+        env:
+          CLOUDFLARE_ZONE: sdk.ceros.com
+          AWS_S3_BUCKET: ceros-sdk-s3-us-east-1
+          FASTLY_HOST: sdk.ceros.com
+        run: |
+          eval $(AWS_ENV_PATH=/prod/Playersdk/ AWS_REGION=us-east-1 ./aws-env)
+          eval $(AWS_ENV_PATH=/common/cloudflare/ AWS_REGION=us-east-1 ./aws-env)
+          grunt release --aws.accessKey=$AWS_ACCESS_KEY_ID --aws.secretKey= --aws.region=$AWS_REGION--aws.secretKey=$AWS_SECRET_ACCESS_KEY --aws.sessionToken=$AWS_SESSION_TOKEN --fastly.key=$FASTLY_KEY --fastly.host=$FASTLY_HOST --aws.s3Bucket=$AWS_S3_BUCKET --cloudflare.zone=$CLOUDFLARE_ZONE  --cloudflare.apiKey=$api_key --cloudflare.email=$email
+
+      - name: Deploy Development
+        if: ${{ github.ref_name == 'develop' || startsWith(github.ref_name, 'release/') || startsWith(github.ref_name, 'feature/') }}
+        env:
+          CLOUDFLARE_ZONE: sdk.cerosdev.com
+          AWS_S3_BUCKET: dev-ceros-sdk-s3-us-east-1
+          FASTLY_HOST: sdk.cerosdev.com
+          CI_BRANCH: ${{ github.ref_name }}
+        run: |
+          eval $(AWS_ENV_PATH=/dev/Playersdk/ AWS_REGION=us-east-1 ./aws-env)
+          eval $(AWS_ENV_PATH=/common/cloudflare/ AWS_REGION=us-east-1 ./aws-env)
+          grunt dev-release --aws.accessKey=$AWS_ACCESS_KEY_ID --aws.secretKey=$AWS_SECRET_ACCESS_KEY --aws.sessionToken=$AWS_SESSION_TOKEN --aws.region=$AWS_REGION --fastly.key=$FASTLY_KEY --fastly.host=$FASTLY_HOST --aws.s3Bucket=$AWS_S3_BUCKET --branch=$CI_BRANCH --cloudflare.zone=$CLOUDFLARE_ZONE --cloudflare.apiKey=$api_key --cloudflare.email=$email
