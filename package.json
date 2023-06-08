@@ -20,7 +20,7 @@
     "grunt-continue": "^0.1.0",
     "grunt-contrib-compress": "^1.1.1",
     "grunt-contrib-requirejs": "^0.4.4",
-    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-watch": "^1.1.0",
     "grunt-fastly": "~0.1.4",
     "grunt-git": "^0.2.14",
     "grunt-version": "~0.2.1",
