@@ -16,7 +16,7 @@ var _elqQ = _elqQ || [];
     require.config({
         paths: { 
             elq: "//img.en25.com/i/elqCfg.min",
-            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v3"
+            CerosSDK: "//sdk.ceros.com/standalone-player-sdk-v5"
         }
     });
 
@@ -41,7 +41,7 @@ var _elqQ = _elqQ || [];
         CerosSDK.findExperience().fail(function(err){
             console.error(err);
         }).done(function(experience){
-            experience.subscribe(CerosSDK.EVENTS.PAGE_CHANGE, function(page){
+            experience.on(CerosSDK.EVENTS.PAGE_CHANGED, function(page){
                 var pageUrl = window.location.href;
                 // if the URL does not end in /p/N, where N is a number
                 if (!pageUrl.match(/\/p\/\d+$/)){
